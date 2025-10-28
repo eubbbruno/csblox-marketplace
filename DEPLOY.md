@@ -1,236 +1,363 @@
 # 🚀 Guia de Deploy - CSBlox Marketplace
 
-## Deploy na Vercel
+## Deploy na Vercel (Recomendado)
 
-### 1. Pré-requisitos
+### 1. Preparar o Repositório
 
-- Conta no GitHub
-- Conta na Vercel (https://vercel.com)
-- Banco PostgreSQL em produção (Supabase, Neon, etc)
-- Credenciais Steam API e Mercado Pago configuradas
+Certifique-se que o código está no GitHub:
+```bash
+git add .
+git commit -m "chore: preparar para deploy"
+git push origin master
+```
 
-### 2. Configurar Banco de Dados em Produção
+### 2. Importar no Vercel
 
-#### Opção A: Supabase (Recomendado)
-
-1. Acesse https://supabase.com e crie um projeto
-2. Vá em Settings > Database
-3. Copie a Connection String (modo Transaction)
-4. Use como \`DATABASE_URL\`
-
-#### Opção B: Neon
-
-1. Acesse https://neon.tech e crie um projeto
-2. Copie a Connection String
-3. Use como \`DATABASE_URL\`
-
-#### Opção C: Railway
-
-1. Acesse https://railway.app
-2. Crie um PostgreSQL Database
-3. Copie a Connection String
-
-### 3. Fazer Push no GitHub
-
-\`\`\`bash
-# Se ainda não tem repositório remoto
-git remote add origin https://github.com/seu-usuario/csblox-marketplace.git
-git branch -M main
-git push -u origin main
-\`\`\`
-
-### 4. Configurar na Vercel
-
-#### 4.1 Importar Projeto
-
-1. Acesse https://vercel.com
+1. Acesse [vercel.com](https://vercel.com)
 2. Clique em "Add New Project"
-3. Importe o repositório do GitHub
-4. Framework Preset: **Next.js** (detectado automaticamente)
+3. Importe o repositório `eubbbruno/csblox-marketplace`
+4. Configure as variáveis de ambiente (veja abaixo)
+5. Clique em "Deploy"
 
-#### 4.2 Configurar Variáveis de Ambiente
+### 3. Configurar Variáveis de Ambiente
 
-Em **Environment Variables**, adicione:
+No painel da Vercel, vá em **Settings > Environment Variables** e adicione:
 
-\`\`\`env
-# Database
-DATABASE_URL=postgresql://user:pass@host:5432/dbname
+#### Obrigatórias
 
-# Auth
+```env
+# NextAuth
 NEXTAUTH_URL=https://seu-dominio.vercel.app
-NEXTAUTH_SECRET=sua-chave-secreta-gerada
+NEXTAUTH_SECRET=gere-com-openssl-rand-base64-32
 
-# Steam
+# Database (use Neon, Supabase ou Railway)
+DATABASE_URL=postgresql://user:password@host:5432/database
+
+# Steam API
 STEAM_API_KEY=sua-steam-api-key
-STEAM_CALLBACK_URL=https://seu-dominio.vercel.app/api/auth/callback/steam
+STEAM_RETURN_URL=https://seu-dominio.vercel.app/api/auth/steam/callback
 
 # Mercado Pago
-NEXT_PUBLIC_MP_PUBLIC_KEY=seu-public-key-producao
-MP_ACCESS_TOKEN=seu-access-token-producao
+MERCADOPAGO_ACCESS_TOKEN=seu-access-token
+MERCADOPAGO_PUBLIC_KEY=sua-public-key
+```
 
-# URLs
-NEXT_PUBLIC_APP_URL=https://seu-dominio.vercel.app
-SITE_URL=https://seu-dominio.vercel.app
-\`\`\`
+#### Opcionais
 
-#### 4.3 Configurar Build Settings
+```env
+# Upstash Redis (cache)
+UPSTASH_REDIS_REST_URL=https://...
+UPSTASH_REDIS_REST_TOKEN=...
 
-- **Framework Preset**: Next.js
-- **Root Directory**: ./
-- **Build Command**: \`npm run build\`
-- **Install Command**: \`npm install\`
+# Analytics
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
 
-### 5. Deploy
+### 4. Configurar Banco de Dados
 
-1. Clique em **Deploy**
-2. Aguarde o build completar (~2-5 minutos)
-3. Acesse o domínio gerado
+#### Opção 1: Neon (PostgreSQL Serverless) - RECOMENDADO
 
-### 6. Após o Deploy
+1. Acesse [neon.tech](https://neon.tech)
+2. Crie uma conta gratuita
+3. Crie um novo projeto
+4. Copie a `DATABASE_URL`
+5. Cole nas variáveis de ambiente da Vercel
+6. Rode as migrações:
 
-#### 6.1 Sincronizar Banco de Dados
+```bash
+# Localmente
+npx prisma migrate deploy
 
-\`\`\`bash
-# Opção 1: Via Vercel CLI (Recomendado)
-vercel env pull .env.production
-npx prisma db push
+# Ou via Vercel CLI
+vercel env pull .env.local
+npx prisma migrate deploy
+```
 
-# Opção 2: Via GitHub Actions (configurar depois)
-\`\`\`
+#### Opção 2: Supabase
 
-#### 6.2 Verificar Steam Callback
+1. Acesse [supabase.com](https://supabase.com)
+2. Crie um projeto
+3. Vá em Settings > Database
+4. Copie a Connection String (URI)
+5. Cole nas variáveis de ambiente
 
-1. Atualize a Steam API Key settings com o novo domínio
-2. Teste o login Steam no site em produção
+#### Opção 3: Railway
 
-#### 6.3 Configurar Domínio Customizado (Opcional)
+1. Acesse [railway.app](https://railway.app)
+2. New Project > PostgreSQL
+3. Copie a `DATABASE_URL`
+4. Cole nas variáveis de ambiente
 
-1. Vá em Settings > Domains na Vercel
+### 5. Configurar Domínio Customizado (Opcional)
+
+1. No painel da Vercel, vá em **Settings > Domains**
 2. Adicione seu domínio
 3. Configure os DNS conforme instruções
+4. Atualize `NEXTAUTH_URL` com o novo domínio
 
-## Configuração de Webhooks (Mercado Pago)
+### 6. Verificar Deploy
 
-### 1. Criar Webhook Endpoint
+Após o deploy:
 
-Já está implementado em: \`/api/webhooks/mercadopago\`
-
-### 2. Configurar no Mercado Pago
-
-1. Acesse https://www.mercadopago.com.br/developers
-2. Vá em Webhooks
-3. Adicione: \`https://seu-dominio.vercel.app/api/webhooks/mercadopago\`
-4. Eventos: payments, chargebacks
-
-## Monitoramento
-
-### Vercel Analytics
-
-1. Vá em Analytics na Vercel
-2. Ative o Web Analytics (gratuito)
-3. Monitore performance e erros
-
-### Logs
-
-\`\`\`bash
-# Ver logs em tempo real
-vercel logs
-
-# Ver logs específicos
-vercel logs --follow
-\`\`\`
-
-## Troubleshooting
-
-### Build Falha
-
-\`\`\`bash
-# Erro comum: Prisma Client não gerado
-# Solução: Adicionar no package.json
-{
-  "scripts": {
-    "postinstall": "prisma generate"
-  }
-}
-\`\`\`
-
-### Erro de Database Connection
-
-- Verifique se a \`DATABASE_URL\` está correta
-- Confirme que o IP da Vercel está na whitelist do banco
-- Use connection pooling (PgBouncer) para produção
-
-### Steam Login não funciona
-
-- Verifique se \`NEXTAUTH_URL\` está correto
-- Atualize o callback URL no Steam Developer
-- Confirme que o \`NEXTAUTH_SECRET\` está configurado
-
-## Otimizações para Produção
-
-### 1. Caching
-
-Já configurado no Next.js 15 automaticamente.
-
-### 2. Image Optimization
-
-As imagens do Steam são otimizadas automaticamente pelo Next.js Image.
-
-### 3. Database Connection Pooling
-
-Use PgBouncer ou Supabase Pooler para melhor performance:
-
-\`\`\`env
-# Supabase Pooler Example
-DATABASE_URL=postgresql://postgres:pass@pooler.supabase.com:6543/postgres?pgbouncer=true
-\`\`\`
-
-### 4. Rate Limiting
-
-Implementar Redis (Upstash) para rate limiting:
-
-\`\`\`bash
-npm install @upstash/redis @upstash/ratelimit
-\`\`\`
-
-## Backup do Banco
-
-\`\`\`bash
-# Backup manual
-pg_dump -h host -U user -d dbname > backup.sql
-
-# Restaurar
-psql -h host -U user -d dbname < backup.sql
-\`\`\`
-
-## Custos Estimados
-
-- **Vercel**: Gratuito (Hobby) ou $20/mês (Pro)
-- **Supabase**: Gratuito até 500MB
-- **Mercado Pago**: 4.99% + R$ 0,39 por transação
-- **Total Inicial**: ~R$ 0/mês (free tier)
-
-## Checklist Final
-
-- [ ] Banco de dados em produção configurado
-- [ ] Variáveis de ambiente na Vercel
-- [ ] Build bem-sucedido
-- [ ] \`prisma db push\` executado
-- [ ] Login Steam funcionando
-- [ ] Webhook Mercado Pago configurado
-- [ ] Domínio customizado (opcional)
-- [ ] Analytics ativado
-- [ ] Backup configurado
-
-## Próximos Passos
-
-1. Configurar CI/CD com GitHub Actions
-2. Implementar testes automatizados
-3. Configurar monitoramento de erros (Sentry)
-4. Implementar rate limiting
-5. Adicionar CDN para assets estáticos
+1. Acesse `https://seu-dominio.vercel.app`
+2. Teste o login via Steam
+3. Verifique o inventário
+4. Teste um depósito PIX (use valores pequenos)
 
 ---
 
-**Boa sorte com seu deploy! 🚀**
+## Deploy Manual (VPS/Servidor)
 
+### Requisitos
+
+- Ubuntu 22.04 LTS
+- Node.js 18+
+- PostgreSQL 14+
+- Nginx
+- PM2
+
+### Passo a Passo
+
+#### 1. Instalar Dependências
+
+```bash
+# Atualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalar Node.js 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Instalar PostgreSQL
+sudo apt install -y postgresql postgresql-contrib
+
+# Instalar PM2
+sudo npm install -g pm2
+
+# Instalar Nginx
+sudo apt install -y nginx
+```
+
+#### 2. Configurar PostgreSQL
+
+```bash
+# Criar banco de dados
+sudo -u postgres psql
+CREATE DATABASE csblox;
+CREATE USER csblox_user WITH PASSWORD 'sua-senha-segura';
+GRANT ALL PRIVILEGES ON DATABASE csblox TO csblox_user;
+\q
+```
+
+#### 3. Clonar e Configurar Projeto
+
+```bash
+# Clonar repositório
+cd /var/www
+sudo git clone https://github.com/eubbbruno/csblox-marketplace.git
+cd csblox-marketplace
+
+# Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente
+sudo nano .env.local
+# Cole as variáveis necessárias
+
+# Rodar migrações
+npx prisma migrate deploy
+npx prisma generate
+
+# Build do projeto
+npm run build
+```
+
+#### 4. Configurar PM2
+
+```bash
+# Iniciar aplicação
+pm2 start npm --name "csblox" -- start
+
+# Configurar auto-start
+pm2 startup
+pm2 save
+
+# Ver logs
+pm2 logs csblox
+```
+
+#### 5. Configurar Nginx
+
+```bash
+sudo nano /etc/nginx/sites-available/csblox
+```
+
+Cole a configuração:
+
+```nginx
+server {
+    listen 80;
+    server_name seu-dominio.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Ativar site:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/csblox /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+#### 6. Configurar SSL (Certbot)
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d seu-dominio.com
+```
+
+#### 7. Atualizar Aplicação
+
+Crie um script de deploy:
+
+```bash
+nano ~/deploy-csblox.sh
+```
+
+```bash
+#!/bin/bash
+cd /var/www/csblox-marketplace
+git pull origin master
+npm install
+npx prisma generate
+npm run build
+pm2 restart csblox
+```
+
+```bash
+chmod +x ~/deploy-csblox.sh
+```
+
+Para atualizar:
+```bash
+~/deploy-csblox.sh
+```
+
+---
+
+## Checklist de Deploy ✅
+
+### Antes do Deploy
+
+- [ ] Código testado localmente
+- [ ] Todas as variáveis de ambiente configuradas
+- [ ] Banco de dados criado
+- [ ] Migrações rodadas
+- [ ] Build funcionando (`npm run build`)
+
+### Após o Deploy
+
+- [ ] Site acessível
+- [ ] Login Steam funcionando
+- [ ] Inventário carregando
+- [ ] Pagamentos testados
+- [ ] SSL configurado (HTTPS)
+- [ ] Monitoramento ativo
+
+### Integrações
+
+- [ ] Steam API Key configurada
+- [ ] Mercado Pago em produção
+- [ ] Webhook do Mercado Pago configurado
+- [ ] Email transacional (SendGrid/Resend)
+- [ ] Analytics (Google Analytics/Plausible)
+
+---
+
+## Monitoramento
+
+### Logs na Vercel
+
+Acesse o painel da Vercel > seu projeto > Logs
+
+### Logs no VPS
+
+```bash
+# Ver logs da aplicação
+pm2 logs csblox
+
+# Ver logs do Nginx
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# Ver logs do PostgreSQL
+sudo tail -f /var/log/postgresql/postgresql-14-main.log
+```
+
+### Ferramentas Recomendadas
+
+- **Sentry** - Monitoramento de erros
+- **Uptime Robot** - Monitoramento de uptime
+- **Datadog** - Métricas e logs
+- **Plausible** - Analytics privado
+
+---
+
+## Troubleshooting
+
+### Erro: "Module not found"
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+### Erro: "Prisma Client not found"
+
+```bash
+npx prisma generate
+npm run build
+```
+
+### Erro: "Database connection failed"
+
+Verifique:
+1. `DATABASE_URL` está correta
+2. Banco de dados está acessível
+3. Firewall permite conexão
+4. Credenciais estão corretas
+
+### Erro: "Steam API not working"
+
+Verifique:
+1. `STEAM_API_KEY` está configurada
+2. IP do servidor está autorizado na Steam
+3. Limite de requisições não foi atingido
+
+---
+
+## Suporte
+
+Se tiver problemas:
+
+1. Verifique os logs
+2. Consulte a documentação
+3. Abra uma issue no GitHub
+4. Entre em contato com o suporte
+
+---
+
+🎉 **Deploy concluído! Boa sorte com seu marketplace!**
