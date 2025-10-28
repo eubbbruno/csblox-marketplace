@@ -1,0 +1,357 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  steamId       String    @unique
+  username      String
+  avatar        String
+  profileUrl    String
+  country       String?
+  tradeUrl      String?
+  
+  // Wallet
+  balance       Decimal   @default(0) @db.Decimal(10, 2)
+  lockedBalance Decimal   @default(0) @db.Decimal(10, 2)
+  
+  // Stats
+  totalSales    Int       @default(0)
+  totalPurchases Int      @default(0)
+  reputation    Decimal   @default(0) @db.Decimal(3, 2)
+  
+  // Status
+  role          Role      @default(USER)
+  status        UserStatus @default(ACTIVE)
+  emailVerified Boolean   @default(false)
+  kycVerified   Boolean   @default(false)
+  
+  // Preferences
+  email         String?
+  notifyEmail   Boolean   @default(true)
+  notifySale    Boolean   @default(true)
+  notifyPurchase Boolean  @default(true)
+  theme         Theme     @default(DARK)
+  
+  // Relations
+  listings      Listing[]
+  purchases     Transaction[] @relation("Buyer")
+  sales         Transaction[] @relation("Seller")
+  deposits      Deposit[]
+  withdrawals   Withdrawal[]
+  notifications Notification[]
+  reviews       Review[]      @relation("ReviewsGiven")
+  receivedReviews Review[]    @relation("ReviewsReceived")
+  favorites     Favorite[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum Theme {
+  LIGHT
+  DARK
+}
+
+model Listing {
+  id            String    @id @default(cuid())
+  
+  // Item details
+  itemName      String
+  itemType      String
+  skinName      String
+  collection    String?
+  rarity        Rarity
+  exterior      Exterior
+  floatValue    Decimal   @db.Decimal(10, 8)
+  paintSeed     Int?
+  patternIndex  Int?
+  
+  // Features
+  isStatTrak    Boolean   @default(false)
+  isSouvenir    Boolean   @default(false)
+  stickers      Json?
+  
+  // Pricing
+  price         Decimal   @db.Decimal(10, 2)
+  steamPrice    Decimal?  @db.Decimal(10, 2)
+  discount      Int?
+  
+  // Media
+  imageUrl      String
+  inspectUrl    String?
+  
+  // Seller
+  sellerId      String
+  seller        User      @relation(fields: [sellerId], references: [id])
+  
+  // Description
+  description   String?   @db.Text
+  
+  // Status
+  status        ListingStatus @default(ACTIVE)
+  views         Int       @default(0)
+  favorites     Int       @default(0)
+  
+  // Duration
+  expiresAt     DateTime
+  
+  // Relations
+  transaction   Transaction?
+  favoriteBy    Favorite[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([status, price])
+  @@index([sellerId])
+  @@index([rarity, exterior])
+}
+
+enum Rarity {
+  CONSUMER
+  INDUSTRIAL
+  MIL_SPEC
+  RESTRICTED
+  CLASSIFIED
+  COVERT
+  CONTRABAND
+}
+
+enum Exterior {
+  FACTORY_NEW
+  MINIMAL_WEAR
+  FIELD_TESTED
+  WELL_WORN
+  BATTLE_SCARRED
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  REMOVED
+  EXPIRED
+}
+
+model Transaction {
+  id            String    @id @default(cuid())
+  
+  buyerId       String
+  buyer         User      @relation("Buyer", fields: [buyerId], references: [id])
+  sellerId      String
+  seller        User      @relation("Seller", fields: [sellerId], references: [id])
+  
+  listingId     String    @unique
+  listing       Listing   @relation(fields: [listingId], references: [id])
+  
+  itemPrice     Decimal   @db.Decimal(10, 2)
+  platformFee   Decimal   @db.Decimal(10, 2)
+  totalAmount   Decimal   @db.Decimal(10, 2)
+  sellerReceives Decimal  @db.Decimal(10, 2)
+  
+  tradeOfferId  String?
+  tradeStatus   TradeStatus @default(PENDING)
+  tradeUrl      String?
+  
+  status        TransactionStatus @default(PENDING)
+  
+  completedAt   DateTime?
+  cancelledAt   DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+enum TradeStatus {
+  PENDING
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+model Deposit {
+  id            String    @id @default(cuid())
+  
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  amount        Decimal   @db.Decimal(10, 2)
+  fee           Decimal   @default(0) @db.Decimal(10, 2)
+  netAmount     Decimal   @db.Decimal(10, 2)
+  
+  method        PaymentMethod
+  
+  providerTxId  String?   @unique
+  paymentData   Json?
+  
+  status        DepositStatus @default(PENDING)
+  
+  expiresAt     DateTime?
+  paidAt        DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BOLETO
+}
+
+enum DepositStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  EXPIRED
+  FAILED
+}
+
+model Withdrawal {
+  id            String    @id @default(cuid())
+  
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  amount        Decimal   @db.Decimal(10, 2)
+  fee           Decimal   @default(0) @db.Decimal(10, 2)
+  netAmount     Decimal   @db.Decimal(10, 2)
+  
+  pixKeyType    String
+  pixKey        String
+  pixName       String
+  pixDocument   String
+  
+  status        WithdrawalStatus @default(PENDING)
+  
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  rejectReason  String?
+  
+  processedAt   DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+}
+
+enum WithdrawalStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  REJECTED
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  type      NotificationType
+  title     String
+  message   String   @db.Text
+  link      String?
+  
+  read      Boolean  @default(false)
+  readAt    DateTime?
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId, read])
+}
+
+enum NotificationType {
+  SALE
+  PURCHASE
+  DEPOSIT
+  WITHDRAWAL
+  SYSTEM
+  PROMOTION
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  
+  authorId    String
+  author      User     @relation("ReviewsGiven", fields: [authorId], references: [id])
+  
+  targetId    String
+  target      User     @relation("ReviewsReceived", fields: [targetId], references: [id])
+  
+  transactionId String @unique
+  
+  rating      Int      // 1-5
+  comment     String?  @db.Text
+  
+  createdAt   DateTime @default(now())
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, listingId])
+  @@index([userId])
+  @@index([listingId])
+}
+
+model Settings {
+  id          String   @id @default("1")
+  
+  // Platform fees
+  salesFee    Decimal  @default(5) @db.Decimal(5, 2) // %
+  withdrawFee Decimal  @default(2.90) @db.Decimal(5, 2) // R$
+  minDeposit  Decimal  @default(20) @db.Decimal(10, 2)
+  maxDeposit  Decimal  @default(5000) @db.Decimal(10, 2)
+  minWithdraw Decimal  @default(10) @db.Decimal(10, 2)
+  maxWithdraw Decimal  @default(5000) @db.Decimal(10, 2)
+  
+  // Maintenance
+  maintenance Boolean  @default(false)
+  maintenanceMessage String? @db.Text
+  
+  updatedAt   DateTime @updatedAt
+}
