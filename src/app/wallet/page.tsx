@@ -38,6 +38,8 @@ export default function WalletPage() {
   const [depositAmount, setDepositAmount] = useState("")
   const [withdrawAmount, setWithdrawAmount] = useState("")
   const [showPixDialog, setShowPixDialog] = useState(false)
+  const [pixData, setPixData] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -45,7 +47,7 @@ export default function WalletPage() {
     }
   }, [status, router])
 
-  const handleDeposit = () => {
+  const handleDeposit = async () => {
     const amount = parseFloat(depositAmount)
     if (isNaN(amount) || amount < 20) {
       toast.error("Valor mínimo de depósito é R$ 20,00")
@@ -55,7 +57,35 @@ export default function WalletPage() {
       toast.error("Valor máximo de depósito é R$ 5.000,00")
       return
     }
-    setShowPixDialog(true)
+    
+    setLoading(true)
+    try {
+      const response = await fetch('/api/payments/mercadopago', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount,
+          userId: session?.user.id,
+          description: `Depósito de ${formatCurrency(amount)}`,
+          type: 'DEPOSIT'
+        })
+      })
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        setPixData(data)
+        setShowPixDialog(true)
+        toast.success("PIX gerado com sucesso!")
+      } else {
+        toast.error("Erro ao gerar PIX")
+      }
+    } catch (error) {
+      console.error('Erro:', error)
+      toast.error("Erro ao processar pagamento")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleWithdraw = () => {
@@ -72,7 +102,8 @@ export default function WalletPage() {
   }
 
   const copyPixCode = () => {
-    navigator.clipboard.writeText("00020126580014br.gov.bcb.pix0136...")
+    const code = pixData?.pixCode || "00020126580014br.gov.bcb.pix0136..."
+    navigator.clipboard.writeText(code)
     toast.success("Código PIX copiado!")
   }
 
@@ -110,7 +141,7 @@ export default function WalletPage() {
         </div>
 
         {/* Saldo Atual */}
-        <Card className="mb-8 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+        <Card className="mb-8 bg-linear-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardHeader>
             <CardTitle className="text-lg">Saldo Disponível</CardTitle>
           </CardHeader>
@@ -187,9 +218,18 @@ export default function WalletPage() {
                 </Button>
               </div>
 
-              <Button className="w-full" onClick={handleDeposit}>
-                <Plus className="h-4 w-4 mr-2" />
-                Gerar PIX
+              <Button className="w-full" onClick={handleDeposit} disabled={loading}>
+                {loading ? (
+                  <>
+                    <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+                    Gerando...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Gerar PIX
+                  </>
+                )}
               </Button>
             </CardContent>
           </Card>
@@ -330,7 +370,7 @@ export default function WalletPage() {
               <Label>Código PIX Copia e Cola</Label>
               <div className="flex gap-2">
                 <Input
-                  value="00020126580014br.gov.bcb.pix0136..."
+                  value={pixData?.pixCode || "Gerando código..."}
                   readOnly
                   className="font-mono text-xs"
                 />
