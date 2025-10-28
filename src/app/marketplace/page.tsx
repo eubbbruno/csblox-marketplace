@@ -64,7 +64,7 @@ const MOCK_LISTINGS: Listing[] = [
     exterior: "MINIMAL_WEAR",
     floatValue: 0.08,
     paintSeed: 789,
-    patternIndex: null,
+    patternIndex: undefined,
     isStatTrak: false,
     isSouvenir: false,
     stickers: null,
