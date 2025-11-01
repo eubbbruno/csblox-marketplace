@@ -71,18 +71,21 @@ export async function POST(request: Request) {
 async function createMockPayment(data: CreatePaymentRequest) {
   const { amount, userId, description, type } = data
   
-  // Criar transação no banco de dados
-  const transaction = await prisma.transaction.create({
+  // Criar depósito no banco de dados
+  const deposit = await prisma.deposit.create({
     data: {
       userId,
-      type,
       amount,
+      fee: 0,
+      netAmount: amount,
+      method: 'PIX',
       status: 'PENDING',
-      paymentMethod: 'PIX',
-      description,
-      metadata: {
-        mock: true
-      }
+      paymentData: {
+        mock: true,
+        description,
+        type
+      },
+      expiresAt: new Date(Date.now() + 30 * 60 * 1000)
     }
   })
   
@@ -91,7 +94,7 @@ async function createMockPayment(data: CreatePaymentRequest) {
   
   return {
     success: true,
-    transactionId: transaction.id,
+    transactionId: deposit.id,
     amount,
     status: 'PENDING',
     pixCode,
