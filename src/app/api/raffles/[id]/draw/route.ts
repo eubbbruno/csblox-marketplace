@@ -49,7 +49,7 @@ export async function POST(
     const winnerTicket = Math.floor(Math.random() * raffle.totalTickets) + 1
 
     // Encontrar o ganhador
-    const winnerEntry = raffle.entries.find(entry => 
+    const winnerEntry = raffle.entries.find((entry: any) => 
       entry.tickets.includes(winnerTicket)
     )
 
