@@ -210,19 +210,7 @@ export default function HomePage() {
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
   
-  // Efeito de entrada épico
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#8B5CF6", "#EC4899", "#3B82F6"],
-      })
-    }, 500)
-    
-    return () => clearTimeout(timer)
-  }, [])
+  // Removido confetti de entrada para carregamento mais rápido
   
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">

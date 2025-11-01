@@ -4,8 +4,9 @@ import "./globals.css"
 import { AuthProvider } from "@/components/providers/session-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { CSCursor } from "@/components/common/cs-cursor"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], display: "swap" })
 
 export const metadata: Metadata = {
   title: "CSBlox - Marketplace de Skins CS2",
@@ -28,6 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
+            <CSCursor />
             {children}
             <Toaster />
           </AuthProvider>

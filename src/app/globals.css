@@ -49,6 +49,89 @@ body {
   background-color: hsl(var(--color-background));
   color: hsl(var(--color-foreground));
   font-feature-settings: "rlig" 1, "calt" 1;
+  cursor: none;
+}
+
+/* Cursor Customizado - Mira CS */
+.cs-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s;
+}
+
+.cs-cursor::before,
+.cs-cursor::after {
+  content: '';
+  position: absolute;
+  background: rgba(0, 255, 0, 0.8);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Linha Horizontal */
+.cs-cursor::before {
+  width: 20px;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* Linha Vertical */
+.cs-cursor::after {
+  width: 2px;
+  height: 20px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+/* Ponto Central */
+.cs-cursor-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 255, 0, 0.9);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+}
+
+/* Hover em elementos clicáveis */
+body:has(a:hover) .cs-cursor,
+body:has(button:hover) .cs-cursor,
+body:has([role="button"]:hover) .cs-cursor {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+body:has(a:hover) .cs-cursor::before,
+body:has(a:hover) .cs-cursor::after,
+body:has(button:hover) .cs-cursor::before,
+body:has(button:hover) .cs-cursor::after {
+  background: rgba(255, 0, 0, 0.8);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+body:has(a:hover) .cs-cursor-dot,
+body:has(button:hover) .cs-cursor-dot {
+  background: rgba(255, 0, 0, 0.9);
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+}
+
+/* Esconder cursor em inputs */
+input, textarea, select {
+  cursor: text !important;
+}
+
+/* Cursor padrão em elementos de texto */
+body:has(input:focus) .cs-cursor,
+body:has(textarea:focus) .cs-cursor {
+  opacity: 0.3;
 }
 
 /* Grid Pattern */
