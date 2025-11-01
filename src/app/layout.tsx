@@ -5,6 +5,7 @@ import { AuthProvider } from "@/components/providers/session-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { CSCursor } from "@/components/common/cs-cursor"
+import { Navbar } from "@/components/layout/navbar"
 
 const inter = Inter({ subsets: ["latin"], display: "swap" })
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             <CSCursor />
+            <Navbar />
             {children}
             <Toaster />
           </AuthProvider>
