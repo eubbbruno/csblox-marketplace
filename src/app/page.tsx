@@ -13,6 +13,7 @@ import { TypeAnimation } from "react-type-animation"
 import CountUp from "react-countup"
 import { useInView } from "react-intersection-observer"
 import confetti from "canvas-confetti"
+import { RaffleCard } from "@/components/raffles/raffle-card"
 import { 
   Sparkles, 
   Zap, 
@@ -30,7 +31,8 @@ import {
   Crown,
   Gem,
   Package,
-  Banknote
+  Banknote,
+  Dices
 } from "lucide-react"
 
 // Componente 3D Animado
@@ -200,6 +202,108 @@ function AnimatedStats() {
         </motion.div>
       ))}
     </div>
+  )
+}
+
+// Componente de Rifas Ativas
+function RafflesSection() {
+  const [raffles, setRaffles] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+
+  useEffect(() => {
+    const fetchRaffles = async () => {
+      try {
+        const response = await fetch('/api/raffles?limit=4&status=ACTIVE')
+        const data = await response.json()
+        if (data.success) {
+          setRaffles(data.raffles)
+        }
+      } catch (error) {
+        console.error('Error fetching raffles:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (inView) {
+      fetchRaffles()
+    }
+  }, [inView])
+
+  return (
+    <section ref={ref} className="py-32 px-6 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 box-pattern opacity-5" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <Badge className="px-4 py-2 mb-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-500/50">
+            <Dices className="w-4 h-4 mr-2 inline" />
+            SORTEIOS AO VIVO
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-black mb-4">
+            <span className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">
+              🎲 Rifas Ativas
+            </span>
+          </h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Participe dos sorteios e ganhe skins incríveis por uma fração do preço!
+          </p>
+        </motion.div>
+
+        {loading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-800/50 rounded-lg h-96" />
+              </div>
+            ))}
+          </div>
+        ) : raffles.length > 0 ? (
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {raffles.map((raffle, i) => (
+                <motion.div
+                  key={raffle.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <RaffleCard raffle={raffle} compact />
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <Link href="/raffles">
+                <Button size="lg" variant="outline" className="border-2 border-orange-500 hover:bg-orange-500/10 text-orange-400 hover:text-orange-300">
+                  Ver Todas as Rifas
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </motion.div>
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <Dices className="w-16 h-16 mx-auto text-gray-600 mb-4" />
+            <p className="text-gray-400">Nenhuma rifa ativa no momento</p>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
@@ -392,6 +496,9 @@ export default function HomePage() {
           <AnimatedStats />
         </div>
       </section>
+      
+      {/* Rifas Section */}
+      <RafflesSection />
       
       {/* Features Section INSANO */}
       <section className="py-32 px-6">
