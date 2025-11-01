@@ -4,11 +4,12 @@ import { prisma } from '@/lib/db'
 // GET /api/raffles/[id] - Detalhes de uma rifa
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const raffle = await prisma.raffle.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         creator: {
           select: {

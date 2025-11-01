@@ -4,9 +4,10 @@ import { prisma } from '@/lib/db'
 // POST /api/raffles/[id]/buy - Comprar números
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { userId, ticketCount } = body
 
@@ -26,7 +27,7 @@ export async function POST(
 
     // Buscar rifa
     const raffle = await prisma.raffle.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         entries: true,
       },
