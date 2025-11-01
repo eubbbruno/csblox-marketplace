@@ -25,7 +25,8 @@ import {
   Menu,
   X,
   Package,
-  Sparkles
+  Sparkles,
+  Dices
 } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
@@ -47,6 +48,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: "/marketplace", label: "Marketplace", icon: Store },
+    { href: "/raffles", label: "Rifas", icon: Dices },
     { href: "/inventory", label: "Inventário", icon: Package },
     { href: "/como-funciona", label: "Como Funciona", icon: null },
   ]
@@ -65,19 +67,21 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <motion.div 
-            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileHover={{ scale: 1.05, rotateY: 180 }}
+            transition={{ duration: 0.3 }}
             className="relative"
+            style={{ transformStyle: "preserve-3d" }}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/60 shadow-lg shadow-primary/25">
-              <span className="text-xl font-bold text-primary-foreground">CS</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-orange-500 to-red-500 shadow-lg shadow-orange-500/25 box-card border border-orange-400/30">
+              <Package className="w-5 h-5 text-white" />
             </div>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
           </motion.div>
           <div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-400">
               CSBlox
             </span>
-            <Badge variant="secondary" className="ml-2 text-xs">Beta</Badge>
+            <Badge variant="secondary" className="ml-2 text-xs bg-orange-500/20 text-orange-400 border-orange-500/50">Beta</Badge>
           </div>
         </Link>
 
