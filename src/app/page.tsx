@@ -1,436 +1,506 @@
 "use client"
 
-import { Navbar } from "@/components/layout/navbar"
+import { useState, useEffect } from "react"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { Canvas } from "@react-three/fiber"
+import { OrbitControls, Sphere, MeshDistortMaterial, Float, Stars } from "@react-three/drei"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
+import Tilt from "react-parallax-tilt"
+import { TypeAnimation } from "react-type-animation"
+import CountUp from "react-countup"
+import { useInView } from "react-intersection-observer"
+import confetti from "canvas-confetti"
 import { 
-  ArrowRight, 
-  Shield, 
+  Sparkles, 
   Zap, 
+  Shield, 
   Trophy, 
   Users, 
-  Banknote, 
-  Clock,
-  Star,
   TrendingUp,
-  CheckCircle2,
-  Sparkles
+  ArrowRight,
+  Play,
+  ChevronDown,
+  Gamepad2,
+  Target,
+  Flame,
+  Star,
+  Crown,
+  Gem,
+  Package,
+  Banknote
 } from "lucide-react"
-import Link from "next/link"
-import { motion } from "framer-motion"
 
-export default function HomePage() {
+// Componente 3D Animado
+function AnimatedSphere() {
   return (
-    <>
-      <Navbar />
-      
-      {/* Hero Section com Gradiente Animado */}
-      <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-        {/* Background Animado */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
-        
-        {/* Efeito de Brilho */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/30 rounded-full blur-[120px] animate-pulse" />
-        
-        <div className="container relative z-10 py-24 sm:py-32">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto max-w-4xl text-center"
-          >
-            {/* Badge de Destaque */}
+    <Float speed={4} rotationIntensity={1} floatIntensity={2}>
+      <Sphere args={[1, 100, 200]} scale={2.5}>
+        <MeshDistortMaterial
+          color="#8B5CF6"
+          attach="material"
+          distort={0.5}
+          speed={1.5}
+          roughness={0}
+        />
+      </Sphere>
+    </Float>
+  )
+}
+
+// Componente de Partículas Animadas
+function ParticlesBackground() {
+  return (
+    <div className="fixed inset-0 -z-10">
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 via-purple-900/10 to-pink-900/20" />
+      <motion.div
+        animate={{
+          backgroundPosition: ["0% 0%", "100% 100%"],
+        }}
+        transition={{
+          duration: 20,
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+    </div>
+  )
+}
+
+// Card de Feature com Animação 3D
+function FeatureCard({ icon: Icon, title, description, delay }: any) {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay }}
+    >
+      <Tilt
+        tiltMaxAngleX={10}
+        tiltMaxAngleY={10}
+        perspective={1000}
+        glareEnable={true}
+        glareMaxOpacity={0.3}
+        glareBorderRadius="24px"
+        scale={1.02}
+      >
+        <Card className="relative h-full p-6 bg-gradient-to-br from-gray-900/90 to-gray-800/90 border-gray-700/50 backdrop-blur-xl overflow-hidden group hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-500">
+          {/* Glow Effect */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg blur opacity-0 group-hover:opacity-30 transition duration-1000" />
+          
+          {/* Animated Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
-            >
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">Marketplace #1 do Brasil</span>
-              <Badge variant="secondary" className="ml-2">Novo</Badge>
-            </motion.div>
-
-            {/* Título Principal */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
-            >
-              Negocie Skins CS2
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/60">
-                Com Segurança
-              </span>
-            </motion.h1>
-
-            {/* Subtítulo */}
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-            >
-              Compre e venda skins com <span className="text-primary font-semibold">PIX instantâneo</span>.
-              Sistema de escrow seguro e taxa de apenas <span className="text-primary font-semibold">5%</span>.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Link href="/login">
-                <Button size="lg" className="gap-2 h-14 px-8 text-lg group">
-                  <Zap className="h-5 w-5 group-hover:animate-pulse" />
-                  Começar Agora
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="/marketplace">
-                <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
-                  Explorar Marketplace
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Social Proof */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground"
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-muted border-2 border-background" />
-                  ))}
-                </div>
-                <span>10K+ usuários</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
-                <span>4.9/5 avaliação</span>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Stats Cards */}
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="mx-auto mt-20 max-w-5xl"
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: "Usuários Ativos", value: "10K+", icon: Users, color: "text-blue-500" },
-                { label: "Skins Vendidas", value: "50K+", icon: Trophy, color: "text-yellow-500" },
-                { label: "Volume Mensal", value: "R$ 500K", icon: TrendingUp, color: "text-green-500" },
-                { label: "Taxa", value: "5%", icon: Banknote, color: "text-purple-500" },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 + i * 0.1 }}
-                >
-                  <Card className="text-center hover:shadow-lg transition-all border-primary/10 bg-card/50 backdrop-blur">
-                    <CardContent className="pt-6">
-                      <stat.icon className={`h-8 w-8 mx-auto mb-3 ${stat.color}`} />
-                      <p className="text-3xl font-bold mb-1">{stat.value}</p>
-                      <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-24 sm:py-32 relative">
-        <div className="container">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mx-auto max-w-2xl text-center mb-16"
-          >
-            <Badge variant="outline" className="mb-4">Recursos</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Por que escolher a CSBlox?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              A plataforma mais completa e segura para negociar skins CS2
-            </p>
-          </motion.div>
-
-          <div className="mx-auto max-w-6xl">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  icon: Zap,
-                  title: "PIX Instantâneo",
-                  description: "Receba seus pagamentos via PIX em segundos após a venda. Sem espera, sem complicação.",
-                  color: "from-yellow-500 to-orange-500",
-                },
-                {
-                  icon: Shield,
-                  title: "100% Seguro",
-                  description: "Sistema de escrow e verificação de itens. Suas transações protegidas do início ao fim.",
-                  color: "from-blue-500 to-cyan-500",
-                },
-                {
-                  icon: Trophy,
-                  title: "Melhores Preços",
-                  description: "Compare preços com o mercado Steam. Economize até 30% nas suas compras.",
-                  color: "from-purple-500 to-pink-500",
-                },
-                {
-                  icon: Users,
-                  title: "Comunidade Ativa",
-                  description: "Milhares de jogadores comprando e vendendo diariamente. Liquidez garantida.",
-                  color: "from-green-500 to-emerald-500",
-                },
-                {
-                  icon: Banknote,
-                  title: "Taxa Baixa",
-                  description: "Apenas 5% de taxa sobre vendas. Uma das menores do mercado brasileiro.",
-                  color: "from-red-500 to-rose-500",
-                },
-                {
-                  icon: Clock,
-                  title: "Suporte 24/7",
-                  description: "Equipe sempre disponível para ajudar. Resposta em menos de 1 hora.",
-                  color: "from-indigo-500 to-violet-500",
-                },
-              ].map((feature, i) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <Card className="group hover:shadow-xl transition-all duration-300 border-primary/10 h-full hover:scale-105">
-                    <CardHeader>
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} p-2.5 mb-4 group-hover:scale-110 transition-transform`}>
-                        <feature.icon className="h-full w-full text-white" />
-                      </div>
-                      <CardTitle className="text-xl">{feature.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="text-base leading-relaxed">
-                        {feature.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Como Funciona */}
-      <section className="py-24 sm:py-32 bg-muted/50">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mx-auto max-w-2xl text-center mb-16"
-          >
-            <Badge variant="outline" className="mb-4">Simples e Rápido</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Como funciona?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Em apenas 3 passos você já está negociando
-            </p>
-          </motion.div>
-
-          <div className="mx-auto max-w-5xl">
-            <div className="grid gap-8 md:grid-cols-3">
-              {[
-                {
-                  step: "01",
-                  title: "Faça Login",
-                  description: "Entre com sua conta Steam de forma segura e rápida",
-                  icon: Shield,
-                },
-                {
-                  step: "02",
-                  title: "Escolha suas Skins",
-                  description: "Navegue pelo marketplace ou liste suas próprias skins",
-                  icon: Trophy,
-                },
-                {
-                  step: "03",
-                  title: "Negocie",
-                  description: "Compre ou venda com PIX instantâneo e receba em segundos",
-                  icon: Zap,
-                },
-              ].map((step, i) => (
-                <motion.div
-                  key={step.step}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
-                  className="relative"
-                >
-                  <Card className="h-full hover:shadow-lg transition-all">
-                    <CardHeader>
-                      <div className="flex items-start gap-4">
-                        <div className="text-6xl font-bold text-primary/20">
-                          {step.step}
-                        </div>
-                        <div className="flex-1">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                            <step.icon className="h-6 w-6 text-primary" />
-                          </div>
-                          <CardTitle className="text-xl mb-2">{step.title}</CardTitle>
-                          <CardDescription className="text-base">
-                            {step.description}
-                          </CardDescription>
-                        </div>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                  {i < 2 && (
-                    <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-primary/20" />
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 sm:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-background" />
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
-        
-        <div className="container relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mx-auto max-w-3xl text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">Comece Hoje Mesmo</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              Pronto para negociar suas skins?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Junte-se a milhares de jogadores e comece a lucrar com suas skins CS2
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/login">
-                <Button size="lg" className="gap-2 h-14 px-8 text-lg group">
-                  Criar Conta Grátis
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="/marketplace">
-                <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
-                  Ver Marketplace
-                </Button>
-              </Link>
-            </div>
-
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-              {[
-                "✓ Sem taxa de cadastro",
-                "✓ PIX instantâneo",
-                "✓ Suporte 24/7",
-                "✓ 100% seguro",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer Profissional */}
-      <footer className="border-t bg-muted/30">
-        <div className="container py-12">
-          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="text-sm font-bold text-primary-foreground">CS</span>
-                </div>
-                <span className="font-bold text-lg">CSBlox</span>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                O marketplace mais seguro e rápido para negociar skins CS2 no Brasil.
-              </p>
-              <div className="flex gap-2">
-                {/* Redes sociais aqui */}
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold mb-4">Produto</h3>
-              <ul className="space-y-2">
-                <li><Link href="/marketplace" className="text-sm text-muted-foreground hover:text-primary transition-colors">Marketplace</Link></li>
-                <li><Link href="/como-funciona" className="text-sm text-muted-foreground hover:text-primary transition-colors">Como Funciona</Link></li>
-                <li><Link href="/taxas" className="text-sm text-muted-foreground hover:text-primary transition-colors">Taxas</Link></li>
-                <li><Link href="/api" className="text-sm text-muted-foreground hover:text-primary transition-colors">API</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold mb-4">Suporte</h3>
-              <ul className="space-y-2">
-                <li><Link href="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
-                <li><Link href="/suporte" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contato</Link></li>
-                <li><Link href="/termos" className="text-sm text-muted-foreground hover:text-primary transition-colors">Termos de Uso</Link></li>
-                <li><Link href="/status" className="text-sm text-muted-foreground hover:text-primary transition-colors">Status</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><Link href="/privacidade" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacidade</Link></li>
-                <li><Link href="/cookies" className="text-sm text-muted-foreground hover:text-primary transition-colors">Cookies</Link></li>
-                <li><Link href="/lgpd" className="text-sm text-muted-foreground hover:text-primary transition-colors">LGPD</Link></li>
-                <li><Link href="/seguranca" className="text-sm text-muted-foreground hover:text-primary transition-colors">Segurança</Link></li>
-              </ul>
-            </div>
+              animate={{
+                backgroundPosition: ["0% 0%", "100% 100%"],
+              }}
+              transition={{
+                duration: 10,
+                ease: "linear",
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+              className="w-full h-full"
+              style={{
+                backgroundImage: `radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)`,
+                backgroundSize: "50px 50px",
+              }}
+            />
           </div>
           
-          <div className="border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground text-center sm:text-left">
-              © 2024 CSBlox. Todos os direitos reservados.
-            </p>
-            <p className="text-xs text-muted-foreground text-center sm:text-right">
-              Counter-Strike é marca registrada da Valve Corporation.
-            </p>
+          <div className="relative z-10">
+            <motion.div
+              whileHover={{ rotate: 360, scale: 1.2 }}
+              transition={{ duration: 0.5 }}
+              className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/50"
+            >
+              <Icon className="w-8 h-8 text-white" />
+            </motion.div>
+            
+            <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
+            <p className="text-gray-400">{description}</p>
+            
+            <motion.div
+              className="mt-4 flex items-center text-purple-400 font-semibold"
+              whileHover={{ x: 5 }}
+            >
+              Saiba mais
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </motion.div>
+          </div>
+          
+          {/* Corner Decoration */}
+          <div className="absolute top-0 right-0 w-20 h-20">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="w-full h-full"
+            >
+              <Sparkles className="w-8 h-8 text-purple-500/20 absolute top-2 right-2" />
+            </motion.div>
+          </div>
+        </Card>
+      </Tilt>
+    </motion.div>
+  )
+}
+
+// Componente de Stats Animados
+function AnimatedStats() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  
+  const stats = [
+    { label: "Usuários Ativos", value: 10000, suffix: "+", icon: Users },
+    { label: "Skins Disponíveis", value: 5000, suffix: "+", icon: Gem },
+    { label: "Volume Mensal", value: 500, suffix: "K+", prefix: "R$", icon: TrendingUp },
+    { label: "Satisfação", value: 99, suffix: "%", icon: Star },
+  ]
+  
+  return (
+    <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+      {stats.map((stat, index) => (
+        <motion.div
+          key={stat.label}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          whileHover={{ scale: 1.05 }}
+          className="relative"
+        >
+          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-xl border border-gray-700/50">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-3 -right-3"
+            >
+              <stat.icon className="w-8 h-8 text-purple-500/30" />
+            </motion.div>
+            
+            <div className="text-4xl font-bold text-white">
+              {inView && (
+                <>
+                  {stat.prefix}
+                  <CountUp end={stat.value} duration={2.5} />
+                  {stat.suffix}
+                </>
+              )}
+            </div>
+            <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+// Componente Principal
+export default function HomePage() {
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 300], [0, 50])
+  const y2 = useTransform(scrollY, [0, 300], [0, -50])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  
+  // Efeito de entrada épico
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#8B5CF6", "#EC4899", "#3B82F6"],
+      })
+    }, 500)
+    
+    return () => clearTimeout(timer)
+  }, [])
+  
+  return (
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <ParticlesBackground />
+      
+      {/* Navbar Flutuante Animado */}
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-gray-900/80 backdrop-blur-xl rounded-full px-8 py-4 flex items-center justify-between border border-gray-800/50 shadow-2xl shadow-purple-500/10">
+            {/* Logo Animado */}
+            <Link href="/" className="flex items-center gap-3">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="relative w-12 h-12"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-md" />
+                <div className="relative bg-black rounded-xl flex items-center justify-center w-full h-full">
+                  <Gamepad2 className="w-6 h-6 text-white" />
+                </div>
+              </motion.div>
+              <div>
+                <span className="text-2xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  CSBLOX
+                </span>
+                <Badge variant="secondary" className="ml-2 text-xs">Beta</Badge>
+              </div>
+            </Link>
+            
+            {/* Menu Central */}
+            <div className="hidden md:flex items-center gap-8">
+              {["Marketplace", "Inventário", "Carteira"].map((item, i) => (
+                <motion.div key={item} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href={`/${item.toLowerCase()}`}
+                    className="relative text-gray-300 hover:text-white transition-colors font-medium"
+                  >
+                    {item}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* CTA Button */}
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link href="/login">
+                <Button className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold px-6 py-2 rounded-full shadow-lg shadow-purple-500/25">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Conectar Steam
+                </Button>
+              </Link>
+            </motion.div>
           </div>
         </div>
-      </footer>
-    </>
+      </motion.nav>
+      
+      {/* Hero Section ÉPICO */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20">
+        {/* Background 3D */}
+        <div className="absolute inset-0">
+          <Canvas camera={{ position: [0, 0, 5] }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            <AnimatedSphere />
+            <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+          </Canvas>
+        </div>
+        
+        {/* Conteúdo do Hero */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            style={{ opacity }}
+          >
+            {/* Badge Animado */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="inline-block mb-6"
+            >
+              <Badge className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/50 backdrop-blur-xl">
+                <Flame className="w-4 h-4 mr-2 text-orange-500 inline" />
+                🔥 #1 Marketplace do Brasil
+              </Badge>
+            </motion.div>
+            
+            {/* Título Principal com Efeito de Digitação */}
+            <motion.h1
+              className="text-5xl md:text-7xl lg:text-8xl font-black mb-6"
+              style={{ y: y1 }}
+            >
+              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent animate-gradient">
+                REVOLUCIONE
+              </span>
+              <span className="block mt-2">
+                <TypeAnimation
+                  sequence={[
+                    'SUAS SKINS',
+                    2000,
+                    'SEU INVENTÁRIO',
+                    2000,
+                    'SEU JOGO',
+                    2000,
+                  ]}
+                  wrapper="span"
+                  speed={50}
+                  repeat={Infinity}
+                  className="text-white"
+                />
+              </span>
+            </motion.h1>
+            
+            {/* Subtítulo */}
+            <motion.p
+              className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              style={{ y: y2 }}
+            >
+              Compre, venda e troque skins de CS2 com
+              <span className="text-purple-400 font-bold"> PIX instantâneo</span> e a
+              <span className="text-pink-400 font-bold"> menor taxa do mercado</span>
+            </motion.p>
+            
+            {/* CTAs */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/login">
+                  <Button size="lg" className="group relative px-8 py-6 text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-2xl shadow-2xl shadow-purple-500/25">
+                    <span className="relative z-10 flex items-center">
+                      <Zap className="w-5 h-5 mr-2" />
+                      Começar Agora
+                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </Button>
+                </Link>
+              </motion.div>
+              
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/marketplace">
+                  <Button size="lg" variant="outline" className="px-8 py-6 text-lg font-bold border-2 border-gray-700 hover:border-purple-500 bg-gray-900/50 backdrop-blur-xl rounded-2xl group">
+                    <Play className="w-5 h-5 mr-2 text-purple-400" />
+                    Ver Marketplace
+                  </Button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+          
+          {/* Scroll Indicator */}
+          <motion.div
+            className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <ChevronDown className="w-8 h-8 text-purple-400" />
+          </motion.div>
+        </div>
+      </section>
+      
+      {/* Stats Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <AnimatedStats />
+        </div>
+      </section>
+      
+      {/* Features Section INSANO */}
+      <section className="py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="px-4 py-2 mb-4 bg-purple-500/10 border-purple-500/50">
+              FEATURES
+            </Badge>
+            <h2 className="text-4xl md:text-6xl font-black mb-4">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Recursos Insanos
+              </span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Tecnologia de ponta para revolucionar sua experiência
+            </p>
+          </motion.div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <FeatureCard
+              icon={Zap}
+              title="PIX Instantâneo"
+              description="Receba em segundos, sem burocracia"
+              delay={0.1}
+            />
+            <FeatureCard
+              icon={Shield}
+              title="100% Seguro"
+              description="Sistema anti-fraude com IA"
+              delay={0.2}
+            />
+            <FeatureCard
+              icon={Trophy}
+              title="Rank System"
+              description="Suba de nível e ganhe recompensas"
+              delay={0.3}
+            />
+            <FeatureCard
+              icon={Target}
+              title="Price Tracker"
+              description="Monitore preços em tempo real"
+              delay={0.4}
+            />
+            <FeatureCard
+              icon={Crown}
+              title="VIP Rewards"
+              description="Benefícios exclusivos para membros"
+              delay={0.5}
+            />
+            <FeatureCard
+              icon={Gem}
+              title="NFT Ready"
+              description="Prepare-se para o futuro"
+              delay={0.6}
+            />
+          </div>
+        </div>
+      </section>
+      
+      {/* CTA Section Final */}
+      <section className="py-32 px-6 relative">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 blur-3xl" />
+            <Card className="relative p-12 bg-gray-900/80 backdrop-blur-xl border-gray-700/50">
+              <Crown className="w-16 h-16 mx-auto mb-6 text-yellow-500" />
+              <h2 className="text-4xl md:text-5xl font-black mb-4">
+                Pronto para
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> dominar?</span>
+              </h2>
+              <p className="text-xl text-gray-400 mb-8">
+                Junte-se a milhares de traders profissionais
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/login">
+                  <Button size="lg" className="px-12 py-6 text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-2xl shadow-2xl shadow-purple-500/25">
+                    <Sparkles className="w-6 h-6 mr-3" />
+                    Criar Conta Grátis
+                  </Button>
+                </Link>
+              </motion.div>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+    </div>
   )
 }
