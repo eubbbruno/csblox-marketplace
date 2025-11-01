@@ -94,8 +94,8 @@ export async function POST(
 
     // Gerar números aleatórios disponíveis
     const soldNumbers = new Set<number>()
-    raffle.entries.forEach(entry => {
-      entry.tickets.forEach(ticket => soldNumbers.add(ticket))
+    raffle.entries.forEach((entry: any) => {
+      entry.tickets.forEach((ticket: number) => soldNumbers.add(ticket))
     })
 
     const availableNumbers: number[] = []
