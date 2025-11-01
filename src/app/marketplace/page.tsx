@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Navbar } from "@/components/layout/navbar"
+import { motion } from "framer-motion"
 import { Filters } from "@/components/marketplace/filters"
 import { ItemCard } from "@/components/marketplace/item-card"
 import { Button } from "@/components/ui/button"
@@ -13,7 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Search, SlidersHorizontal } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { PageHeader } from "@/components/common/page-header"
+import { EmptyState } from "@/components/common/empty-state"
+import { LoadingState } from "@/components/common/loading-state"
+import { Search, SlidersHorizontal, TrendingUp, Flame, Sparkles, Package } from "lucide-react"
 import { MarketplaceFilters, Listing } from "@/types"
 import { toast } from "sonner"
 
@@ -132,6 +136,7 @@ export default function MarketplacePage() {
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleFiltersChange = (newFilters: MarketplaceFilters) => {
     setFilters(newFilters)
@@ -147,41 +152,92 @@ export default function MarketplacePage() {
   }
 
   const handleAddToCart = (listingId: string) => {
-    toast.success("Item adicionado ao carrinho!")
+    toast.success("Item adicionado ao carrinho!", {
+      icon: "🛒",
+    })
   }
 
   const handleToggleFavorite = (listingId: string) => {
-    toast.success("Item adicionado aos favoritos!")
+    toast.success("Item adicionado aos favoritos!", {
+      icon: "❤️",
+    })
   }
 
   // Aplicar filtros (simulado - será feito no backend)
   const filteredListings = MOCK_LISTINGS
 
+  // Stats rápidas
+  const stats = [
+    { label: "Itens Disponíveis", value: "5.2K+", icon: Package, color: "text-blue-400" },
+    { label: "Melhor Oferta", value: "-15%", icon: TrendingUp, color: "text-green-400" },
+    { label: "Novos Hoje", value: "127", icon: Sparkles, color: "text-purple-400" },
+    { label: "Em Alta", value: "AK-47", icon: Flame, color: "text-orange-400" },
+  ]
+
   return (
-    <>
-      <Navbar />
-      
-      <div className="container py-8">
-        {/* Cabeçalho */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Marketplace</h1>
-          <p className="text-muted-foreground">
-            Encontre as melhores skins CS2 com os melhores preços
-          </p>
-        </div>
+    <div className="min-h-screen bg-[--color-bg-primary]">
+      <div className="container py-8 space-y-8">
+        {/* Header */}
+        <PageHeader
+          title="Marketplace"
+          description="Encontre as melhores skins CS2 com os melhores preços e menor taxa do Brasil"
+        />
+
+        {/* Stats Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
+              className="relative group"
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-purple-600/10 to-pink-600/10 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative p-4 rounded-lg bg-[--color-bg-secondary] border border-[--color-border] hover:border-[--color-border-hover] transition-all">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg bg-[--color-bg-tertiary] ${stat.color}`}>
+                    <stat.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-[--color-text-primary]">{stat.value}</div>
+                    <div className="text-xs text-[--color-text-tertiary]">{stat.label}</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Busca e Ordenação */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex flex-col sm:flex-row gap-4"
+        >
           <div className="flex-1 flex gap-2">
-            <Input
-              placeholder="Buscar por nome da skin..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="flex-1"
-            />
-            <Button onClick={handleSearch}>
-              <Search className="h-4 w-4" />
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[--color-text-tertiary]" />
+              <Input
+                placeholder="Buscar por nome da skin, coleção ou raridade..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                className="pl-10 bg-[--color-bg-secondary] border-[--color-border] focus:border-purple-500"
+              />
+            </div>
+            <Button 
+              onClick={handleSearch}
+              className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              Buscar
             </Button>
           </div>
 
@@ -190,88 +246,143 @@ export default function MarketplacePage() {
               value={filters.sortBy}
               onValueChange={(value) => setFilters({ ...filters, sortBy: value as any })}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] bg-[--color-bg-secondary] border-[--color-border]">
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="newest">Mais Recentes</SelectItem>
-                <SelectItem value="price_asc">Menor Preço</SelectItem>
-                <SelectItem value="price_desc">Maior Preço</SelectItem>
-                <SelectItem value="popular">Mais Popular</SelectItem>
-                <SelectItem value="float_asc">Menor Float</SelectItem>
-                <SelectItem value="float_desc">Maior Float</SelectItem>
+                <SelectItem value="newest">🆕 Mais Recentes</SelectItem>
+                <SelectItem value="price_asc">💰 Menor Preço</SelectItem>
+                <SelectItem value="price_desc">💎 Maior Preço</SelectItem>
+                <SelectItem value="popular">🔥 Mais Popular</SelectItem>
+                <SelectItem value="float_asc">✨ Menor Float</SelectItem>
+                <SelectItem value="float_desc">🎯 Maior Float</SelectItem>
               </SelectContent>
             </Select>
 
             <Button
               variant="outline"
-              className="lg:hidden"
+              className="lg:hidden border-[--color-border]"
               onClick={() => setShowMobileFilters(!showMobileFilters)}
             >
               <SlidersHorizontal className="h-4 w-4" />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Layout Principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
           {/* Filtros */}
-          <aside className={`${showMobileFilters ? 'block' : 'hidden'} lg:block`}>
-            <Filters
-              filters={filters}
-              onFiltersChange={handleFiltersChange}
-              onReset={handleResetFilters}
-            />
-          </aside>
+          <motion.aside
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className={`${showMobileFilters ? 'block' : 'hidden'} lg:block`}
+          >
+            <div className="sticky top-24">
+              <Filters
+                filters={filters}
+                onFiltersChange={handleFiltersChange}
+                onReset={handleResetFilters}
+              />
+            </div>
+          </motion.aside>
 
           {/* Grid de Itens */}
-          <main>
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                Mostrando <span className="font-semibold">{filteredListings.length}</span> itens
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredListings.map((listing) => (
-                <ItemCard
-                  key={listing.id}
-                  listing={listing}
-                  onAddToCart={handleAddToCart}
-                  onToggleFavorite={handleToggleFavorite}
-                />
-              ))}
-            </div>
-
-            {/* Paginação */}
-            {filteredListings.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-lg text-muted-foreground">
-                  Nenhum item encontrado com os filtros selecionados
-                </p>
-                <Button variant="outline" className="mt-4" onClick={handleResetFilters}>
+          <motion.main
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {/* Contador de Resultados */}
+            <div className="mb-6 flex items-center justify-between p-4 rounded-lg bg-[--color-bg-secondary] border border-[--color-border]">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="border-purple-500/50 text-purple-400">
+                  {filteredListings.length} itens encontrados
+                </Badge>
+                {filters.search && (
+                  <Badge variant="outline" className="border-pink-500/50 text-pink-400">
+                    Buscando: "{filters.search}"
+                  </Badge>
+                )}
+              </div>
+              {filters.search && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="text-[--color-text-tertiary] hover:text-[--color-text-primary]"
+                >
                   Limpar Filtros
                 </Button>
-              </div>
+              )}
+            </div>
+
+            {/* Loading State */}
+            {isLoading && (
+              <LoadingState count={6} />
             )}
 
-            {filteredListings.length > 0 && (
-              <div className="mt-8 flex justify-center gap-2">
-                <Button variant="outline" disabled>
+            {/* Grid de Skins */}
+            {!isLoading && filteredListings.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+              >
+                {filteredListings.map((listing, index) => (
+                  <motion.div
+                    key={listing.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <ItemCard
+                      listing={listing}
+                      onAddToCart={handleAddToCart}
+                      onToggleFavorite={handleToggleFavorite}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+
+            {/* Empty State */}
+            {!isLoading && filteredListings.length === 0 && (
+              <EmptyState
+                icon={Package}
+                title="Nenhum item encontrado"
+                description="Não encontramos nenhuma skin com os filtros selecionados. Tente ajustar os filtros ou fazer uma nova busca."
+                action={{
+                  label: "Limpar Filtros",
+                  onClick: handleResetFilters,
+                }}
+              />
+            )}
+
+            {/* Paginação */}
+            {!isLoading && filteredListings.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="mt-8 flex justify-center gap-2"
+              >
+                <Button variant="outline" disabled className="border-[--color-border]">
                   Anterior
                 </Button>
-                <Button variant="outline">1</Button>
-                <Button variant="outline">2</Button>
-                <Button variant="outline">3</Button>
-                <Button variant="outline">
+                <Button className="bg-linear-to-r from-purple-600 to-pink-600">1</Button>
+                <Button variant="outline" className="border-[--color-border]">2</Button>
+                <Button variant="outline" className="border-[--color-border]">3</Button>
+                <Button variant="outline" className="border-[--color-border]">
                   Próximo
                 </Button>
-              </div>
+              </motion.div>
             )}
-          </main>
+          </motion.main>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
