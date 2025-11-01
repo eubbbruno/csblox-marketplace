@@ -191,10 +191,9 @@ export default function RafflesPage() {
               Minhas Rifas
             </TabsTrigger>
           </TabsList>
-        </Tabs>
 
-        {/* Main Content */}
-        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Main Content */}
+          <div className="grid lg:grid-cols-4 gap-6 mt-6">
           {/* Sidebar Filters */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -366,7 +365,7 @@ export default function RafflesPage() {
               )}
             </TabsContent>
           </div>
-        </div>
+        </Tabs>
 
         {/* Mobile Filter Toggle */}
         <Button
