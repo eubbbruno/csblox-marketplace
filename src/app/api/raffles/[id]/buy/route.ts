@@ -116,7 +116,7 @@ export async function POST(
     selectedTickets.sort((a, b) => a - b)
 
     // Transação: Criar entry e atualizar saldos
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Criar entry
       const entry = await tx.raffleEntry.create({
         data: {
