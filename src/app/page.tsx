@@ -123,7 +123,12 @@ export default function HomePage() {
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
   const y2 = useTransform(scrollY, [0, 300], [0, -50])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
-  const [onlineUsers] = useState(Math.floor(Math.random() * 500) + 200)
+  const [onlineUsers, setOnlineUsers] = useState(0)
+  
+  // Evitar erro de hydration - gerar número apenas no cliente
+  useEffect(() => {
+    setOnlineUsers(Math.floor(Math.random() * 500) + 200)
+  }, [])
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
@@ -151,20 +156,22 @@ export default function HomePage() {
             style={{ opacity }}
           >
             {/* Badge Animado */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="inline-block mb-6"
-            >
-              <Badge className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/50 backdrop-blur-xl">
-                <span className="relative flex h-3 w-3 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                🔥 {onlineUsers}+ usuários online agora
-              </Badge>
-            </motion.div>
+            {onlineUsers > 0 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="inline-block mb-6"
+              >
+                <Badge className="px-4 py-2 text-sm font-bold bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/50 backdrop-blur-xl">
+                  <span className="relative flex h-3 w-3 mr-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                  </span>
+                  🔥 {onlineUsers}+ usuários online agora
+                </Badge>
+              </motion.div>
+            )}
 
             {/* Título Principal com Efeito de Digitação */}
             <motion.h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6" style={{ y: y1 }}>
