@@ -18,6 +18,7 @@ import {
   TrendingUp, 
   DollarSign,
   Eye,
+  Zap,
   Clock,
   ArrowRight,
   Plus,

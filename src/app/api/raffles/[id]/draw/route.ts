@@ -100,7 +100,7 @@ export async function POST(
       })
 
       // Criar notificações para todos os participantes
-      const participantIds: string[] = [...new Set(raffle.entries.map((e: any) => e.userId))]
+      const participantIds: string[] = [...new Set<string>(raffle.entries.map((e: any) => e.userId))]
       const notifications = participantIds
         .filter((id) => id !== winnerEntry.userId)
         .map((userId) => ({

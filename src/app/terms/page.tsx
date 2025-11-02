@@ -75,7 +75,7 @@ export default function TermsPage() {
         <PageHeader
           title="Termos de Uso"
           description="Leia atentamente nossos termos e condições de uso"
-          icon={FileText}
+          icon={<FileText className="w-6 h-6 text-white" />}
         />
 
         <motion.div

@@ -131,7 +131,7 @@ export default function HowItWorksPage() {
         <PageHeader
           title="Como Funciona"
           description="Aprenda a usar o CSBlox em 4 passos simples"
-          icon={Sparkles}
+          icon={<Sparkles className="w-6 h-6 text-white" />}
         />
 
         {/* Steps Section */}

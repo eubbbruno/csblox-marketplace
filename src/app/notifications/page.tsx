@@ -31,7 +31,7 @@ export default function NotificationsPage() {
         <PageHeader
           title="Notificações"
           description="Fique por dentro de todas as suas atividades"
-          action={
+          actions={
             notifications.length > 0 && (
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" className="border-[--color-border]">

@@ -118,7 +118,7 @@ export default function RefundPage() {
         <PageHeader
           title="Política de Reembolso"
           description="Entenda nossas políticas de reembolso e cancelamento"
-          icon={DollarSign}
+          icon={<DollarSign className="w-6 h-6 text-white" />}
         />
 
         <motion.div

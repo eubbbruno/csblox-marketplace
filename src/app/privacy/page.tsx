@@ -123,7 +123,7 @@ A data da última atualização é sempre exibida no topo desta página.`,
         <PageHeader
           title="Política de Privacidade"
           description="Como coletamos, usamos e protegemos suas informações"
-          icon={Shield}
+          icon={<Shield className="w-6 h-6 text-white" />}
         />
 
         <motion.div

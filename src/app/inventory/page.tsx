@@ -119,7 +119,7 @@ export default function InventoryPage() {
         <PageHeader
           title="Meu Inventário Steam"
           description="Gerencie suas skins CS2 e crie anúncios para vender no marketplace"
-          action={
+          actions={
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
@@ -154,13 +154,13 @@ export default function InventoryPage() {
             title="Total de Itens"
             value={filteredItems.length.toString()}
             icon={Package}
-            trend={filteredItems.length > 0 ? "up" : undefined}
+            trend={filteredItems.length > 0 ? { value: "+5%", isPositive: true } : undefined}
           />
           <StatCard
             title="Valor Total"
             value={formatCurrency(totalValue)}
             icon={DollarSign}
-            trend="up"
+            trend={{ value: "+12%", isPositive: true }}
           />
           <StatCard
             title="Selecionados"
@@ -171,7 +171,7 @@ export default function InventoryPage() {
             title="Valor Selecionado"
             value={formatCurrency(selectedValue)}
             icon={TrendingUp}
-            trend={selectedValue > 0 ? "up" : undefined}
+            trend={selectedValue > 0 ? { value: `${selectedItems.size} itens`, isPositive: true } : undefined}
           />
         </motion.div>
         
@@ -252,7 +252,7 @@ export default function InventoryPage() {
                 ? 'Tente buscar por outro termo ou ajuste os filtros'
                 : 'Você ainda não tem itens do CS2 no seu inventário Steam. Compre skins no marketplace ou jogue CS2 para conseguir drops!'
             }
-            action={searchTerm ? {
+            actions={searchTerm ? {
               label: "Limpar Busca",
               onClick: () => setSearchTerm('')
             } : undefined}
