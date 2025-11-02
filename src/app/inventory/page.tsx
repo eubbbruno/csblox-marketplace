@@ -252,7 +252,7 @@ export default function InventoryPage() {
                 ? 'Tente buscar por outro termo ou ajuste os filtros'
                 : 'Você ainda não tem itens do CS2 no seu inventário Steam. Compre skins no marketplace ou jogue CS2 para conseguir drops!'
             }
-            actions={searchTerm ? {
+            action={searchTerm ? {
               label: "Limpar Busca",
               onClick: () => setSearchTerm('')
             } : undefined}
