@@ -365,6 +365,7 @@ export default function RafflesPage() {
               )}
             </TabsContent>
           </div>
+        </div>
         </Tabs>
 
         {/* Mobile Filter Toggle */}
