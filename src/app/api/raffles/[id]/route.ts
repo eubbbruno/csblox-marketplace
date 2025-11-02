@@ -53,7 +53,7 @@ export async function GET(
 
     // Incrementar views
     await prisma.raffle.update({
-      where: { id: params.id },
+      where: { id },
       data: { views: { increment: 1 } },
     })
 
