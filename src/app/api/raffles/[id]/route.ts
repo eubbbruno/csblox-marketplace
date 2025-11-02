@@ -59,12 +59,12 @@ export async function GET(
 
     // Calcular números vendidos
     const soldNumbers = new Set<number>()
-    raffle.entries.forEach(entry => {
-      entry.tickets.forEach(ticket => soldNumbers.add(ticket))
+    raffle.entries.forEach((entry: any) => {
+      entry.tickets.forEach((ticket: number) => soldNumbers.add(ticket))
     })
 
     // Estatísticas
-    const uniqueParticipants = new Set(raffle.entries.map(e => e.userId)).size
+    const uniqueParticipants = new Set(raffle.entries.map((e: any) => e.userId)).size
     const progressPercentage = (raffle.soldTickets / raffle.totalTickets) * 100
     const timeRemaining = raffle.endDate.getTime() - Date.now()
 

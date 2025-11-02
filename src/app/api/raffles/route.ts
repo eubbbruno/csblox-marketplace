@@ -47,8 +47,8 @@ export async function GET(request: Request) {
     })
 
     // Calcular estatísticas para cada rifa
-    const rafflesWithStats = raffles.map(raffle => {
-      const uniqueParticipants = new Set(raffle.entries.map(e => e.userId)).size
+    const rafflesWithStats = raffles.map((raffle: any) => {
+      const uniqueParticipants = new Set(raffle.entries.map((e: any) => e.userId)).size
       const progressPercentage = (raffle.soldTickets / raffle.totalTickets) * 100
 
       return {

@@ -83,9 +83,9 @@ export async function GET(request: Request) {
 }
 
 function processInventoryItems(assets: SteamItem[], descriptions: any[]) {
-  return assets.map(asset => {
+  return assets.map((asset: SteamItem) => {
     const description = descriptions.find(
-      d => d.classid === asset.classid && d.instanceid === asset.instanceid
+      (d: any) => d.classid === asset.classid && d.instanceid === asset.instanceid
     )
     
     return {
