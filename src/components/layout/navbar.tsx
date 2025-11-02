@@ -50,7 +50,7 @@ export function Navbar() {
     { href: "/marketplace", label: "Marketplace", icon: Store },
     { href: "/raffles", label: "Rifas", icon: Dices },
     { href: "/inventory", label: "Inventário", icon: Package },
-    { href: "/como-funciona", label: "Como Funciona", icon: null },
+    { href: "/how-it-works", label: "Como Funciona", icon: Sparkles },
   ]
 
   return (
@@ -65,23 +65,44 @@ export function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-3 group">
           <motion.div 
-            whileHover={{ scale: 1.05, rotateY: 180 }}
-            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3, type: "spring" }}
             className="relative"
-            style={{ transformStyle: "preserve-3d" }}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-orange-500 to-red-500 shadow-lg shadow-orange-500/25 box-card border border-orange-400/30">
-              <Package className="w-5 h-5 text-white" />
+            {/* Você pode substituir por sua logo aqui */}
+            {/* Opção 1: Usar uma imagem */}
+            {/* <Image src="/logo.png" alt="CSBlox" width={40} height={40} className="rounded-lg" /> */}
+            
+            {/* Opção 2: Ícone atual (padrão) */}
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 shadow-lg shadow-orange-500/30 box-card border-2 border-orange-400/40 relative overflow-hidden">
+              {/* Efeito de brilho */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Package className="w-6 h-6 text-white relative z-10" />
             </div>
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+            
+            {/* Indicador Online */}
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-lg shadow-green-500/50"
+            />
           </motion.div>
-          <div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-400">
-              CSBlox
+          
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 tracking-tight">
+                CSBlox
+              </span>
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-orange-500/20 text-orange-400 border-orange-500/50 font-bold">
+                BETA
+              </Badge>
+            </div>
+            <span className="text-[10px] text-muted-foreground font-medium -mt-1">
+              Marketplace CS2
             </span>
-            <Badge variant="secondary" className="ml-2 text-xs bg-orange-500/20 text-orange-400 border-orange-500/50">Beta</Badge>
           </div>
         </Link>
 

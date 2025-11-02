@@ -1,3 +1,4 @@
+// Lista expandida de skins CS2 para desenvolvimento
 export const MOCK_SKINS = [
   {
     name: "AK-47 | Redline",
@@ -87,7 +88,127 @@ export const MOCK_SKINS = [
     isStatTrak: false,
     isSouvenir: false,
   },
+  {
+    name: "AK-47 | Fire Serpent",
+    rarity: "COVERT" as const,
+    exterior: "FIELD_TESTED" as const,
+    float: 0.20,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV08-jhIWZlP_1IbzUklRd4cJ5nqeQo9-h2wPn-hJuYjv3cYGWdQE4YV-F-gO9w-3u0Ja06ZzKnXI3uCQ8pSGKRXp6Gxw",
+    steamPrice: 1800.00,
+    type: "Rifle",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
+  {
+    name: "M4A4 | Asiimov",
+    rarity: "COVERT" as const,
+    exterior: "FIELD_TESTED" as const,
+    float: 0.28,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou-6kejhjxszFJQJD_9W7m5a0mvLwOq7c2G5S7ctlmdbN_Iv9nBrsqUBkMGD6JYGVdw85ZgrYrFG_w7vrgJe46p_MnXdhvCF04nyPnRGpwUYb5TqkMrQ",
+    steamPrice: 420.00,
+    type: "Rifle",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
+  {
+    name: "AWP | Asiimov",
+    rarity: "COVERT" as const,
+    exterior: "FIELD_TESTED" as const,
+    float: 0.25,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot621FAR17PLfYQJD_9W7m5a0mvLwOq7c2G5S7ctlmdbN_Iv9nBrsqUBkMGD6JYGVdw85ZgrYrFG_w7vrgJe46p_MnXdhvCF04nyPnRGpwUYb5TqkMrQ",
+    steamPrice: 850.00,
+    type: "Sniper Rifle",
+    isStatTrak: true,
+    isSouvenir: false,
+  },
+  {
+    name: "Butterfly Knife | Doppler",
+    rarity: "COVERT" as const,
+    exterior: "FACTORY_NEW" as const,
+    float: 0.01,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf0ebcZThQ6tCvq4GGqPD1PrbQqWdQ-sJ0teXI8oThxlDh8hs4a2GlLNWVJFI4YFrQ-gK8k-vxxcjr3V7Beg",
+    steamPrice: 3200.00,
+    type: "Knife",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
+  {
+    name: "AK-47 | Vulcan",
+    rarity: "CLASSIFIED" as const,
+    exterior: "FACTORY_NEW" as const,
+    float: 0.05,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV09-5lpKKqPrxN7LEmyVQ7MEpiLuSrYmnjQO3-UdsZGHyd4_Bd1RvNQ7T_FDrw-_og8O46oOJlyU6Qxr5Vg",
+    steamPrice: 520.00,
+    type: "Rifle",
+    isStatTrak: true,
+    isSouvenir: false,
+  },
+  {
+    name: "P250 | Asiimov",
+    rarity: "CLASSIFIED" as const,
+    exterior: "FIELD_TESTED" as const,
+    float: 0.26,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopujwezhjxszYI2gS09-5lpKKqPrxN7LEmyVQ7MEpiLuSrYmnjQO3-UdsZGHyd4_Bd1RvNQ7T_FDrw-_og8O46oOJlyU6Qxr5Vg",
+    steamPrice: 85.00,
+    type: "Pistol",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
+  {
+    name: "M4A1-S | Hyper Beast",
+    rarity: "COVERT" as const,
+    exterior: "MINIMAL_WEAR" as const,
+    float: 0.10,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpou-6kejhz2v_Nfz5H_uO1gb-Gw_alIITCmX5d_MR6j-3I4IG7jVWx-0JrYGGhJYSRdAU6YFrS_gO9w-3u0Ja06ZzKnXI3uCQ8pSGKRXp6Gxw",
+    steamPrice: 320.00,
+    type: "Rifle",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
+  {
+    name: "Glock-18 | Water Elemental",
+    rarity: "CLASSIFIED" as const,
+    exterior: "MINIMAL_WEAR" as const,
+    float: 0.12,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgposbaqKAxf0Ob3djFN79fnzL-YkuP1Nq7cqWdQ-sJ0teXI8oThxlDh8hs4a2GlLNWVJFI4YFrQ-gK8k-vxxcjr3V7Beg",
+    steamPrice: 95.00,
+    type: "Pistol",
+    isStatTrak: true,
+    isSouvenir: false,
+  },
+  {
+    name: "AK-47 | Neon Revolution",
+    rarity: "CLASSIFIED" as const,
+    exterior: "FIELD_TESTED" as const,
+    float: 0.22,
+    image: "https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpot7HxfDhjxszJemkV09-5lpKKqPrxN7LEmyVQ7MEpiLuSrYmnjQO3-UdsZGHyd4_Bd1RvNQ7T_FDrw-_og8O46oOJlyU6Qxr5Vg",
+    steamPrice: 180.00,
+    type: "Rifle",
+    isStatTrak: false,
+    isSouvenir: false,
+  },
 ]
 
 export type MockSkin = typeof MOCK_SKINS[number]
+
+// Função para gerar skins com preços variados para o marketplace
+export function generateMarketplaceSkins(count: number = 50) {
+  const skins = []
+  for (let i = 0; i < count; i++) {
+    const baseSkin = MOCK_SKINS[i % MOCK_SKINS.length]
+    const priceVariation = 0.8 + Math.random() * 0.4 // 80% a 120% do preço base
+    skins.push({
+      ...baseSkin,
+      id: `skin-${i}`,
+      price: Number((baseSkin.steamPrice * priceVariation).toFixed(2)),
+      discount: Math.random() > 0.7 ? Math.floor(Math.random() * 20) + 5 : 0,
+      seller: {
+        id: `user-${Math.floor(Math.random() * 100)}`,
+        username: `Player${Math.floor(Math.random() * 10000)}`,
+        reputation: Math.floor(Math.random() * 100),
+      },
+    })
+  }
+  return skins
+}
 
