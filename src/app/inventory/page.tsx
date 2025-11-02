@@ -113,19 +113,19 @@ export default function InventoryPage() {
     .reduce((sum, item) => sum + (item.steamPrice || 0), 0)
   
   return (
-    <div className="min-h-screen bg-[--color-bg-primary]">
-      <div className="container py-8 space-y-8">
+    <div className="min-h-screen bg-[--color-bg-primary] pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="container px-4 md:px-6 py-6 md:py-8 space-y-6 md:space-y-8">
         {/* Header */}
         <PageHeader
           title="Meu Inventário Steam"
           description="Gerencie suas skins CS2 e crie anúncios para vender no marketplace"
           actions={
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button 
                 variant="outline" 
                 onClick={loadInventory} 
                 disabled={loading}
-                className="border-[--color-border]"
+                className="w-full sm:w-auto border-[--color-border]"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Atualizar
@@ -133,7 +133,7 @@ export default function InventoryPage() {
               {selectedItems.size > 0 && (
                 <Button 
                   onClick={handleListItems}
-                  className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  className="w-full sm:w-auto bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 >
                   <ShoppingBag className="h-4 w-4 mr-2" />
                   Vender ({selectedItems.size})
@@ -148,7 +148,7 @@ export default function InventoryPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"
         >
           <StatCard
             title="Total de Itens"
@@ -308,7 +308,7 @@ export default function InventoryPage() {
             </div>
             
             {/* Grid de Skins */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
               {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.assetId}

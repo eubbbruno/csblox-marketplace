@@ -110,8 +110,8 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-black text-white pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <PageHeader
           title={`Olá, ${session.user.username}! 👋`}
@@ -119,15 +119,15 @@ export default function DashboardPage() {
           badge="Dashboard"
           icon={<Activity className="w-6 h-6 text-white" />}
           actions={
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <Link href="/sell">
-                <Button className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700">
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700">
                   <Plus className="w-4 h-4 mr-2" />
                   Vender Item
                 </Button>
               </Link>
               <Link href="/wallet">
-                <Button variant="outline" className="border-purple-500/50 hover:bg-purple-500/10">
+                <Button variant="outline" className="w-full sm:w-auto border-purple-500/50 hover:bg-purple-500/10">
                   <Wallet className="w-4 h-4 mr-2" />
                   Carteira
                 </Button>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
         />
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
           <StatCard
             title="Saldo Disponível"
             value={stats.balance}
@@ -178,13 +178,13 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mb-8"
+          className="mb-8 md:mb-12"
         >
-          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <Zap className="w-6 h-6 text-yellow-400" />
+          <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 flex items-center gap-2">
+            <Zap className="w-5 h-5 md:w-6 md:h-6 text-yellow-400" />
             Ações Rápidas
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {[
               { icon: ShoppingBag, label: "Marketplace", href: "/marketplace", color: "from-purple-500 to-pink-500" },
               { icon: Dices, label: "Rifas", href: "/raffles", color: "from-orange-500 to-red-500" },
@@ -199,9 +199,9 @@ export default function DashboardPage() {
                   whileHover={{ scale: 1.05, y: -5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Card className={`bg-gradient-to-br ${action.color} p-6 border-0 cursor-pointer group`}>
-                    <action.icon className="w-8 h-8 text-white mb-2" />
-                    <p className="text-white font-bold">{action.label}</p>
+                  <Card className={`bg-gradient-to-br ${action.color} p-4 md:p-6 border-0 cursor-pointer group shadow-lg hover:shadow-xl transition-shadow`}>
+                    <action.icon className="w-6 h-6 md:w-8 md:h-8 text-white mb-2" />
+                    <p className="text-white font-bold text-sm md:text-base">{action.label}</p>
                   </Card>
                 </motion.div>
               </Link>

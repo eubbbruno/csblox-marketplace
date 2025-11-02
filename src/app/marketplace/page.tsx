@@ -175,8 +175,8 @@ export default function MarketplacePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[--color-bg-primary]">
-      <div className="container py-8 space-y-8">
+    <div className="min-h-screen bg-[--color-bg-primary] pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="container px-4 md:px-6 py-6 md:py-8 space-y-6 md:space-y-8">
         {/* Header */}
         <PageHeader
           title="Marketplace"
@@ -188,7 +188,7 @@ export default function MarketplacePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -270,7 +270,7 @@ export default function MarketplacePage() {
         </motion.div>
 
         {/* Layout Principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-4 md:gap-6">
           {/* Filtros */}
           <motion.aside
             initial={{ opacity: 0, x: -20 }}
@@ -278,7 +278,7 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className={`${showMobileFilters ? 'block' : 'hidden'} lg:block`}
           >
-            <div className="sticky top-24">
+            <div className="sticky top-20 md:top-24">
               <Filters
                 filters={filters}
                 onFiltersChange={handleFiltersChange}
@@ -294,7 +294,7 @@ export default function MarketplacePage() {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             {/* Contador de Resultados */}
-            <div className="mb-6 flex items-center justify-between p-4 rounded-lg bg-[--color-bg-secondary] border border-[--color-border]">
+            <div className="mb-4 md:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 md:p-4 rounded-lg bg-[--color-bg-secondary] border border-[--color-border]">
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="border-purple-500/50 text-purple-400">
                   {filteredListings.length} itens encontrados
@@ -328,7 +328,7 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6"
               >
                 {filteredListings.map((listing, index) => (
                   <motion.div

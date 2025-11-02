@@ -82,7 +82,7 @@ function AnimatedStats() {
   ]
 
   return (
-    <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+    <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-16 md:mt-20">
       {stats.map((stat, index) => (
         <motion.div
           key={stat.label}
@@ -92,7 +92,7 @@ function AnimatedStats() {
           whileHover={{ scale: 1.05 }}
           className="relative"
         >
-          <div className="relative p-6 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-xl border border-gray-700/50">
+          <div className="relative p-4 md:p-6 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 hover:border-purple-500/30 transition-colors">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -251,29 +251,39 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 px-6">
+      <section className="py-12 md:py-20 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <AnimatedStats />
         </div>
       </section>
 
       {/* Popular Skins Section */}
-      <PopularSkinsSection />
+      <section className="py-12 md:py-16">
+        <PopularSkinsSection />
+      </section>
 
       {/* How It Works Section */}
-      <HowItWorksSection />
+      <section className="py-12 md:py-16">
+        <HowItWorksSection />
+      </section>
 
       {/* Testimonials Section */}
-      <TestimonialsSection />
+      <section className="py-12 md:py-16">
+        <TestimonialsSection />
+      </section>
 
       {/* FAQ Section */}
-      <FAQSection />
+      <section className="py-12 md:py-16">
+        <FAQSection />
+      </section>
 
       {/* Newsletter Section */}
-      <NewsletterSection />
+      <section className="py-12 md:py-16">
+        <NewsletterSection />
+      </section>
 
       {/* CTA Section Final */}
-      <section className="py-32 px-6 relative">
+      <section className="py-16 md:py-32 px-4 md:px-6 relative">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
