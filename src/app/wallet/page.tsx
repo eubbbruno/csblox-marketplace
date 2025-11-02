@@ -149,7 +149,7 @@ export default function WalletPage() {
             title="Saldo Disponível"
             value={formatCurrency(session.user.balance || 0)}
             icon={Wallet}
-            trend="up"
+            trend={{ value: "+R$ 150", isPositive: true }}
           />
           <StatCard
             title="Total Depositado"

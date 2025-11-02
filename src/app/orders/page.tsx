@@ -33,7 +33,7 @@ export default function OrdersPage() {
                 icon={Package}
                 title="Nenhuma compra encontrada"
                 description="Você ainda não realizou nenhuma compra. Explore o marketplace!"
-                actions={{
+                action={{
                   label: "Ir para Marketplace",
                   onClick: () => window.location.href = "/marketplace"
                 }}
@@ -91,7 +91,7 @@ export default function OrdersPage() {
               icon={Package}
               title="Nenhuma venda encontrada"
               description="Você ainda não vendeu nenhum item. Anuncie suas skins!"
-              actions={{
+              action={{
                 label: "Vender Itens",
                 onClick: () => window.location.href = "/inventory"
               }}

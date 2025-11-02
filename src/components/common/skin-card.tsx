@@ -51,7 +51,6 @@ export function SkinCard({ skin, variant = "default", onAddToCart, onLike }: Ski
         spread: 40,
         origin: { y: 0.6 },
         colors: ["#ff0000", "#ff69b4"],
-        shapes: ["heart"],
       })
     }
     onLike?.(skin.id)
@@ -235,7 +234,7 @@ export function SkinCard({ skin, variant = "default", onAddToCart, onLike }: Ski
                         <Star
                           key={i}
                           className={`w-3 h-3 ${
-                            i < Math.floor(skin.seller.reputation!)
+                            i < Math.floor(skin.seller?.reputation || 0)
                               ? 'text-yellow-500 fill-yellow-500'
                               : 'text-gray-600'
                           }`}

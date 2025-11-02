@@ -107,13 +107,13 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
             title="Total de Vendas"
             value={user.totalSales.toString()}
             icon={Package}
-            trend="up"
+            trend={{ value: "+15%", isPositive: true }}
           />
           <StatCard
             title="Receita Total"
             value={formatCurrency(user.totalRevenue)}
             icon={DollarSign}
-            trend="up"
+            trend={{ value: "+28%", isPositive: true }}
           />
           <StatCard
             title="Anúncios Ativos"

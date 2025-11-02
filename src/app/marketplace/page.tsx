@@ -353,7 +353,7 @@ export default function MarketplacePage() {
                 icon={Package}
                 title="Nenhum item encontrado"
                 description="Não encontramos nenhuma skin com os filtros selecionados. Tente ajustar os filtros ou fazer uma nova busca."
-                actions={{
+                action={{
                   label: "Limpar Filtros",
                   onClick: handleResetFilters,
                 }}
