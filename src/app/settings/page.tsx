@@ -68,14 +68,14 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[--color-bg-primary]">
-      <div className="container py-8 max-w-5xl space-y-8">
+    <div className="min-h-screen bg-[--color-bg-primary] pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="container px-4 md:px-6 py-6 md:py-8 max-w-5xl space-y-6 md:space-y-8">
         <PageHeader
           title="Configurações"
           description="Gerencie as configurações da sua conta e preferências"
         />
 
-        <div className="grid gap-6 lg:grid-cols-[250px_1fr]">
+        <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-[250px_1fr]">
           {/* Sidebar com Preview do Perfil */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}

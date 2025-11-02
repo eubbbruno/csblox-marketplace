@@ -130,8 +130,8 @@ export default function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[--color-bg-primary]">
-      <div className="container py-8 max-w-6xl space-y-8">
+    <div className="min-h-screen bg-[--color-bg-primary] pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="container px-4 md:px-6 py-6 md:py-8 max-w-6xl space-y-6 md:space-y-8">
         {/* Header */}
         <PageHeader
           title="Carteira"
@@ -143,7 +143,7 @@ export default function WalletPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"
         >
           <StatCard
             title="Saldo Disponível"
@@ -173,10 +173,10 @@ export default function WalletPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid gap-6 md:grid-cols-2"
+          className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2"
         >
           {/* Depositar */}
-          <Card className="bg-[--color-bg-secondary] border-[--color-border] hover:border-green-500/50 transition-all">
+          <Card className="bg-[--color-bg-secondary] border-[--color-border] hover:border-green-500/50 transition-all shadow-lg hover:shadow-xl">
             <CardHeader>
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-lg bg-green-500/10">

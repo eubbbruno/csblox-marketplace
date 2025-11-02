@@ -134,15 +134,15 @@ export default function RafflesPage() {
   })
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-black text-white pt-20 md:pt-24 pb-12 md:pb-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6 md:mb-8"
         >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
             <div>
               <h1 className="text-4xl md:text-5xl font-black mb-2">
                 <span className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">
@@ -319,7 +319,7 @@ export default function RafflesPage() {
           <div className="lg:col-span-3">
             <TabsContent value={activeTab} className="mt-0">
               {loading ? (
-                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div key={i} className="animate-pulse">
                       <div className="bg-gray-800/50 rounded-lg h-96" />
@@ -328,10 +328,10 @@ export default function RafflesPage() {
                 </div>
               ) : filteredRaffles.length > 0 ? (
                 <>
-                  <div className="mb-4 text-sm text-gray-400">
+                  <div className="mb-3 md:mb-4 text-sm text-gray-400">
                     Mostrando {filteredRaffles.length} rifa(s)
                   </div>
-                  <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                     {filteredRaffles.map((raffle, i) => (
                       <motion.div
                         key={raffle.id}
