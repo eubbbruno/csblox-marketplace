@@ -61,7 +61,7 @@ export async function POST(
     }
 
     // Atualizar rifa e entry do ganhador
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Atualizar rifa
       const updatedRaffle = await tx.raffle.update({
         where: { id: raffle.id },

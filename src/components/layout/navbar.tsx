@@ -76,7 +76,7 @@ export function Navbar() {
             {/* Opção 1: Usar uma imagem */}
             {/* <Image src="/logo.png" alt="CSBlox" width={40} height={40} className="rounded-lg" /> */}
             
-            {/* Opção 2: Ícone atual (padrão) */}
+            {/* Opção 2: Ícone atual (padrão) - v2.0 */}
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 shadow-lg shadow-orange-500/30 box-card border-2 border-orange-400/40 relative overflow-hidden">
               {/* Efeito de brilho */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
