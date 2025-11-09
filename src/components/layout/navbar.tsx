@@ -59,110 +59,138 @@ export function Navbar() {
       animate={{ y: 0 }}
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-xl border-b shadow-lg"
-          : "bg-background/60 backdrop-blur-md border-b border-border/40"
+          ? "bg-background/95 backdrop-blur-xl border-b shadow-lg shadow-primary/5"
+          : "bg-background/80 backdrop-blur-lg border-b border-border/40"
       }`}
     >
-      <div className="container flex h-16 items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+      <div className="container flex h-20 items-center justify-between px-4 md:px-6">
+        {/* Logo - v3.0 MELHORADO */}
+        <Link href="/" className="flex items-center gap-3 md:gap-4 group">
           <motion.div 
-            whileHover={{ scale: 1.05, rotate: 5 }}
+            whileHover={{ scale: 1.08, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3, type: "spring" }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 400 }}
             className="relative"
           >
-            {/* Você pode substituir por sua logo aqui */}
-            {/* Opção 1: Usar uma imagem */}
-            {/* <Image src="/logo.png" alt="CSBlox" width={40} height={40} className="rounded-lg" /> */}
+            {/* 🎨 OPÇÃO 1: Usar sua logo personalizada (descomente e adicione sua logo em /public) */}
+            {/* <Image src="/logo.png" alt="CSBlox" width={48} height={48} className="rounded-xl" /> */}
             
-            {/* Opção 2: Ícone atual (padrão) - v2.0 */}
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 shadow-lg shadow-orange-500/30 box-card border-2 border-orange-400/40 relative overflow-hidden">
-              {/* Efeito de brilho */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <Package className="w-6 h-6 text-white relative z-10" />
+            {/* 🎨 OPÇÃO 2: Logo padrão com tema Blox (atual) */}
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 shadow-xl shadow-orange-500/40 box-card border-2 border-orange-400/50 relative overflow-hidden">
+              {/* Efeito de brilho animado */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-tr from-white/30 to-transparent"
+                animate={{ 
+                  opacity: [0, 0.3, 0],
+                  rotate: [0, 180, 360]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+              <Package className="w-7 h-7 text-white relative z-10 drop-shadow-lg" />
             </div>
             
-            {/* Indicador Online */}
+            {/* Indicador Online pulsante */}
             <motion.div 
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-lg shadow-green-500/50"
-            />
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [1, 0.7, 1]
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-3 border-background shadow-xl shadow-green-500/60"
+            >
+              <div className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-75" />
+            </motion.div>
           </motion.div>
           
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 tracking-tight">
+              <span className="text-2xl md:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 tracking-tight drop-shadow-sm">
                 CSBlox
               </span>
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-orange-500/20 text-orange-400 border-orange-500/50 font-bold">
+              <Badge variant="secondary" className="text-[9px] md:text-[10px] px-1.5 py-0.5 bg-orange-500/20 text-orange-400 border-orange-500/50 font-bold animate-pulse">
                 BETA
               </Badge>
             </div>
-            <span className="text-[10px] text-muted-foreground font-medium -mt-1">
+            <span className="text-[10px] md:text-xs text-muted-foreground font-semibold -mt-0.5 tracking-wide">
               Marketplace CS2
             </span>
           </div>
         </Link>
 
         {/* Menu Central - Desktop */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-2">
           {navLinks.map((link) => {
             const isActive = pathname === link.href
             return (
               <Link key={link.href} href={link.href}>
-                <Button
-                  variant={isActive ? "secondary" : "ghost"}
-                  size="sm"
-                  className={`gap-2 relative ${
-                    isActive ? "bg-primary/10 text-primary" : ""
-                  }`}
+                <motion.div
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  {link.icon && <link.icon className="h-4 w-4" />}
-                  {link.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Button>
+                  <Button
+                    variant={isActive ? "secondary" : "ghost"}
+                    size="default"
+                    className={`gap-2 relative font-semibold transition-all ${
+                      isActive 
+                        ? "bg-primary/15 text-primary shadow-md shadow-primary/10" 
+                        : "hover:bg-primary/5"
+                    }`}
+                  >
+                    {link.icon && <link.icon className={`h-4 w-4 ${isActive ? 'text-primary' : ''}`} />}
+                    {link.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-indicator"
+                        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 rounded-t-full"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </Button>
+                </motion.div>
               </Link>
             )
           })}
         </div>
 
         {/* Menu Direito */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 md:gap-3">
           {status === "loading" ? (
             <div className="h-10 w-32 animate-pulse rounded-lg bg-muted" />
           ) : session?.user ? (
             <>
               {/* Saldo */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div 
+                whileHover={{ scale: 1.05, y: -2 }} 
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="default"
                   onClick={() => router.push("/wallet")}
-                  className="hidden sm:flex gap-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+                  className="hidden sm:flex gap-2 border-green-500/30 hover:border-green-500/50 hover:bg-green-500/10 font-bold shadow-sm hover:shadow-md hover:shadow-green-500/20 transition-all"
                 >
                   <Wallet className="h-4 w-4 text-green-500" />
-                  <span className="font-semibold">{formatCurrency(session.user.balance || 0)}</span>
+                  <span className="text-green-500">{formatCurrency(session.user.balance || 0)}</span>
                 </Button>
               </motion.div>
 
               {/* Carrinho */}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div 
+                whileHover={{ scale: 1.05, y: -2 }} 
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="icon"
                   onClick={() => router.push("/cart")}
-                  className="relative"
+                  className="relative border-primary/20 hover:border-primary/40 hover:bg-primary/10"
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-primary text-primary-foreground animate-pulse">
                     0
                   </Badge>
                 </Button>
@@ -171,15 +199,20 @@ export function Navbar() {
               {/* Menu do Usuário */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2 hover:bg-primary/5">
-                    <Avatar className="h-8 w-8 ring-2 ring-primary/20">
-                      <AvatarImage src={session.user.avatar} alt={session.user.username} />
-                      <AvatarFallback className="bg-primary/10 text-primary">
-                        {session.user.username[0].toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="hidden sm:inline-block font-medium">{session.user.username}</span>
-                  </Button>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button variant="ghost" size="default" className="gap-2 md:gap-3 hover:bg-primary/10 transition-all">
+                      <Avatar className="h-9 w-9 ring-2 ring-primary/30 hover:ring-primary/50 transition-all">
+                        <AvatarImage src={session.user.avatar} alt={session.user.username} />
+                        <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-bold">
+                          {session.user.username[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="hidden md:inline-block font-semibold">{session.user.username}</span>
+                    </Button>
+                  </motion.div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl">
                   <DropdownMenuLabel className="flex items-center gap-2">
@@ -212,10 +245,14 @@ export function Navbar() {
               </DropdownMenu>
             </>
           ) : (
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }} 
+              whileTap={{ scale: 0.95 }}
+            >
               <Button
                 onClick={() => router.push("/login")}
-                className="gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25"
+                size="default"
+                className="gap-2 bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all font-bold"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM8.5 17C6.57 17 5 15.43 5 13.5C5 11.57 6.57 10 8.5 10C10.43 10 12 11.57 12 13.5C12 15.43 10.43 17 8.5 17ZM17 13C15.9 13 15 12.1 15 11C15 9.9 15.9 9 17 9C18.1 9 19 9.9 19 11C19 12.1 18.1 13 17 13Z"/>
@@ -230,10 +267,10 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
       </div>
